@@ -14,49 +14,73 @@ public class PlayerMovementScript : MonoBehaviour
 
     public CharacterController characterController;
     
-
+	private bool moving = false;
     private Vector3 movement;
     private Rigidbody playerRigidBody;
-
+	private string currentAnim = "";
+	private bool targeting;
     void Awake()
     {
+		
+		animator.Play ("Idle");
         playerRigidBody = GetComponent<Rigidbody>();
     }
+
+	void Update(){
+		targeting = GetComponent<PlayerTargetScript> ().getWhetherTargeting ();
+	}
 
     void FixedUpdate()
     {
         float lh = Input.GetAxisRaw("Horizontal");
         float lv = Input.GetAxisRaw("Vertical");
-
         Move(lh, lv);
     }
 
 
     void Move(float lh, float lv)
     {
-        movement.Set(lh, 0f, lv);
+		//MOVEMENT WHEN NOT TARGETING
+		if (!targeting) {
+			movement.Set (lh, 0f, lv);
+			if (lh == 0 && lv == 0) {
+				if (currentAnim != "Idle") {
+					currentAnim = "Idle";
+					animator.CrossFade (currentAnim, 0.2f);
+				} 
+			} else {
+			
+				if (currentAnim != "Run") {
+					currentAnim = "Run";
+					animator.CrossFade (currentAnim, 0.2f);
+				}
+			}
+			movement = camera.transform.TransformDirection (movement);
+			movement.y = 0f;
 
-        movement = camera.transform.TransformDirection(movement);
-        movement.y = 0f;
-
-        /*
+			/*
         if (Input.GetKey(KeyCode.LeftShift))
         {
             movement = movement.normalized * runSpeed * Time.deltaTime;
         }
         else */
-        {
-            movement = movement.normalized * speed * Time.deltaTime;
-        }
+			{
+				movement = movement.normalized * speed * Time.deltaTime;
+			}
 
-        playerRigidBody.MovePosition(transform.position + movement);
+			playerRigidBody.MovePosition (transform.position + movement);
 
-        
 
-        if (lh != 0f || lv != 0f)
-        {
-            Rotating(lh, lv);
-        }
+			if (lh != 0f || lv != 0f) {
+				Rotating (lh, lv);
+			}
+
+		}
+		//MOVEMENT WHEN TARGETING
+		else {
+
+		}
+			
     }
 
 
@@ -69,6 +93,8 @@ public class PlayerMovementScript : MonoBehaviour
         Quaternion newRotation = Quaternion.Lerp(GetComponent<Rigidbody>().rotation, targetRotation, turnSmoothing * Time.deltaTime);
 
         GetComponent<Rigidbody>().MoveRotation(newRotation);
+
+		//TODO: obtain rotation and blend the correct turn animation
 
     }
 

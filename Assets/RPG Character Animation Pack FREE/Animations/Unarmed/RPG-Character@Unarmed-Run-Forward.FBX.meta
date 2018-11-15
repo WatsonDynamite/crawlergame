@@ -245,24 +245,25 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    motionNodeName: Motion
+    motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
       might lower retargeting quality:\n\t'B_Spine2' is inbetween humanoid transforms
       and has rotation animation that will be discarded.\n"
-    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Take 001':\n\tLeftUpperArm
-      average position error 7.0 mm and maximum position error 12.9 mm at time 0:17
-      (70.8%) Frame 17\n\tLeftLowerArm average position error 3.9 mm and maximum position
-      error 6.6 mm at time 0:17 (70.8%) Frame 17\n\tLeftHand average position error
-      4.3 mm and maximum position error 8.8 mm at time 0:24 (100.0%) Frame 24\n\tRightUpperArm
-      average position error 5.6 mm and maximum position error 14.4 mm at time 0:
-      5 (20.8%) Frame 5\n\tRightLowerArm average position error 3.3 mm and maximum
-      position error 8.8 mm at time 0: 5 (20.8%) Frame 5\n\tRightHand average position
-      error 2.5 mm and maximum position error 5.0 mm at time 0: 8 (33.3%) Frame 8\n\tHead
-      average position error 15.3 mm and maximum position error 25.0 mm at time 0:
-      0 (0.0%) Frame 0\n"
+    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Take 001':\n\tLeftLowerLeg
+      average position error 0.8 mm and maximum position error 10.8 mm at time 0:
+      1 (4.2%) Frame 1\n\tLeftUpperArm average position error 7.0 mm and maximum position
+      error 12.9 mm at time 0:17 (70.8%) Frame 17\n\tLeftLowerArm average position
+      error 3.9 mm and maximum position error 6.6 mm at time 0:17 (70.8%) Frame 17\n\tLeftHand
+      average position error 4.3 mm and maximum position error 8.8 mm at time 0: 0
+      (0.0%) Frame 0\n\tRightUpperArm average position error 5.6 mm and maximum position
+      error 14.4 mm at time 0: 5 (20.8%) Frame 5\n\tRightLowerArm average position
+      error 3.3 mm and maximum position error 8.8 mm at time 0: 5 (20.8%) Frame 5\n\tRightHand
+      average position error 2.5 mm and maximum position error 5.0 mm at time 0: 8
+      (33.3%) Frame 8\n\tHead average position error 15.3 mm and maximum position
+      error 25.0 mm at time 0: 0 (0.0%) Frame 0\n"
     animationDoRetargetingWarnings: 1
     animationCompression: 3
     animationRotationError: 0.5
@@ -284,8 +285,8 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 1
-      loopBlendOrientation: 1
-      loopBlendPositionY: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
