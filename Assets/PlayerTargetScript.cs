@@ -20,19 +20,24 @@ public class PlayerTargetScript : MonoBehaviour {
 
 		//we're always chekcing which object is closest by
 		float closestDistance = float.MaxValue;
-		GameObject closestObject = null;
-		foreach (GameObject target in arrayOfTargetables) {
-			if (Vector3.Distance (transform.position, target.transform.position) < closestDistance) {
-				closestObject = target;
-				closestDistance = Vector3.Distance (transform.position, target.transform.position);
-			}
-		}
 
-		if (Input.GetKey (KeyCode.Q)) {
+		
+
+		if (Input.GetKeyDown (KeyCode.Q)) {
 			toggletargeting ();
 			//IF WE'RE TARGETING:
 			if (targeting) {
-				targetText.text = "Targeting:" + closestObject.name; //remove after debug
+                GameObject closestObject = null;
+                foreach (GameObject target in arrayOfTargetables)
+                {
+                    if (Vector3.Distance(transform.position, target.transform.position) < closestDistance)
+                    {
+                        closestObject = target;
+                        closestDistance = Vector3.Distance(transform.position, target.transform.position);
+                    }
+                }
+                currentTarget = closestObject;
+                targetText.text = "Targeting:" + currentTarget.name; //remove after debug
 			}
 		}
 			
@@ -49,5 +54,10 @@ public class PlayerTargetScript : MonoBehaviour {
 			targetText.text = "Targeting: ";
 		}
 	}
+
+    public GameObject getCurrentTarget()
+    {
+        return currentTarget;
+    }
 
 }

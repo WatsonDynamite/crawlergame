@@ -5,6 +5,10 @@ public class MouseLookCamera : MonoBehaviour
 {
 
     public Transform target;
+
+    private bool isTargeting;
+    private GameObject targetingTarget;
+
     public float distance = 5.0f;
     public float xSpeed = 120.0f;
     public float ySpeed = 120.0f;
@@ -23,6 +27,7 @@ public class MouseLookCamera : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+       
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
@@ -36,8 +41,15 @@ public class MouseLookCamera : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        isTargeting = target.GetComponent<PlayerTargetScript>().getWhetherTargeting();
+        targetingTarget = target.GetComponent<PlayerTargetScript>().getCurrentTarget();
+    }
+
     void LateUpdate()
     {
+
         if (target)
         {
             x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.02f;
@@ -59,6 +71,12 @@ public class MouseLookCamera : MonoBehaviour
 
             transform.rotation = rotation;
             transform.position = position;
+        }
+        if (isTargeting) {
+            Vector3 rotation = Quaternion.LookRotation(targetingTarget.transform.position - transform.position).eulerAngles;
+            rotation = new Vector3(transform.eulerAngles.x, rotation.y, transform.eulerAngles.z);
+            Quaternion rot = Quaternion.Euler(rotation);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * 3);
         }
     }
 
