@@ -72,7 +72,11 @@ public class PlayerMovementScript : MonoBehaviour
         //MOVEMENT WHEN TARGETING
         else
         {
+			if (Input.GetKeyDown (KeyCode.Space)) {
 
+
+				return;
+			}
             Vector3 rotation = Quaternion.LookRotation(target.transform.position - transform.position).eulerAngles;
             rotation = new Vector3(transform.eulerAngles.x, rotation.y, transform.eulerAngles.z);
             Quaternion rot = Quaternion.Euler(rotation);

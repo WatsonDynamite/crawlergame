@@ -38,6 +38,11 @@ public class PlayerTargetScript : MonoBehaviour {
                 }
                 currentTarget = closestObject;
                 targetText.text = "Targeting:" + currentTarget.name; //remove after debug
+				getCurrentTarget().SendMessage("spawnReticule");
+
+			}
+			if (!targeting) {
+				getCurrentTarget ().SendMessage ("deleteReticule");
 			}
 		}
 			
@@ -51,7 +56,7 @@ public class PlayerTargetScript : MonoBehaviour {
 	public void toggletargeting(){
 		targeting = !targeting;	
 		if (!targeting) {
-			targetText.text = "Targeting: ";
+			targetText.text = "Targeting: NULL";
 		}
 	}
 
