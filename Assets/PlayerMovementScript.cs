@@ -12,8 +12,8 @@ public class PlayerMovementScript : MonoBehaviour
 
     public Animator animator;
     
-    
-	private bool moving = false;
+  
+	public bool dodging = false;
     private Vector3 movement;
     private Rigidbody playerRigidBody;
 	private string currentAnim = "";
@@ -24,16 +24,26 @@ public class PlayerMovementScript : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody>();
     }
 
+    void Start()
+    {
+        
+    }
+
 	void Update(){
 		targeting = GetComponent<PlayerTargetScript> ().getWhetherTargeting ();
         target = GetComponent<PlayerTargetScript>().getCurrentTarget();
-	}
+        animator.SetBool("isTargeting", targeting);
+        dodging = animator.GetBool("isDodging");
+
+    }
 
     void FixedUpdate()
     {
         float lh = Input.GetAxisRaw("Horizontal");
         float lv = Input.GetAxisRaw("Vertical");
         Move(lh, lv);
+        animator.SetFloat("MovementH", lh, 1f, Time.deltaTime * 10f);
+        animator.SetFloat("MovementV", lv, 1f, Time.deltaTime * 10f);
     }
 
 
@@ -45,7 +55,7 @@ public class PlayerMovementScript : MonoBehaviour
             movement.Set(lh, 0f, lv);
             if (lh == 0 && lv == 0)
             {
-                if (currentAnim != "Idle") 
+                if (currentAnim != "Idle")
                 {
                     currentAnim = "Idle";
                     animator.CrossFade(currentAnim, 0.2f);
@@ -72,94 +82,28 @@ public class PlayerMovementScript : MonoBehaviour
         //MOVEMENT WHEN TARGETING
         else
         {
-			if (Input.GetKeyDown (KeyCode.Space)) {
+            if (!animator.GetBool("isDodging"))
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    animator.SetBool("isDodging", true);
+                    movement.Set(5f, 0f, 0f);
+                    
+                }
+
+                Vector3 rotation = Quaternion.LookRotation(target.transform.position - transform.position).eulerAngles;
+                rotation = new Vector3(transform.eulerAngles.x, rotation.y, transform.eulerAngles.z);
+                Quaternion rot = Quaternion.Euler(rotation);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * 3);
+                movement.Set(lh, 0f, lv);
 
 
-				return;
-			}
-            Vector3 rotation = Quaternion.LookRotation(target.transform.position - transform.position).eulerAngles;
-            rotation = new Vector3(transform.eulerAngles.x, rotation.y, transform.eulerAngles.z);
-            Quaternion rot = Quaternion.Euler(rotation);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * 3);
-            movement.Set(lh, 0f, lv);
-            if (lh == 0 && lv == 0)
-            {
-                if (currentAnim != "Idle")//change this to targeting idle
-                {
-                    currentAnim = "Idle";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh >= 0 && lv == 0) //strafe to the right
-            {
-                if (currentAnim != "Strafe Right")
-                {
-                    currentAnim = "Strafe Right";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh >= 0 && lv >= 0) //strafe forward right
-            {
-                if (currentAnim != "Strafe Forward Right")
-                {
-                    currentAnim = "Strafe Forward Right";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh == 0 && lv >= 0) //strafe forward
-            {
-                if (currentAnim != "Strafe Forward")
-                {
-                    currentAnim = "Strafe Forward";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh <= 0 && lv >= 0) //strafe forward left
-            {
-                if (currentAnim != "Strafe Forward Left")
-                {
-                    currentAnim = "Strafe Forward Left";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh <= 0 && lv == 0) //strafe left
-            {
-                if (currentAnim != "Strafe Left")
-                {
-                    currentAnim = "Strafe Left";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh <= 0 && lv <= 0) //strafe backward left
-            {
-                if (currentAnim != "Strafe Backward Left")
-                {
-                    currentAnim = "Strafe Backward Left";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh == 0 && lv <= 0) //strafe backward
-            {
-                if (currentAnim != "Strafe Backward")
-                {
-                    currentAnim = "Strafe Backward";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
-            else if (lh >= 0 && lv <= 0) //strafe backward right
-            {
-                if (currentAnim != "Strafe Backward Right")
-                {
-                    currentAnim = "Strafe Backward Right";
-                    animator.CrossFade(currentAnim, 0.2f);
-                }
-            }
 
-
-            movement = -(camera.transform.TransformDirection(-movement));
-            movement.y = 0f;
-
+                movement = -(camera.transform.TransformDirection(-movement));
+                movement.y = 0f;
+            }
         }
+
         movement = movement.normalized * speed * Time.deltaTime;
         playerRigidBody.MovePosition(transform.position + movement);
     }
@@ -178,4 +122,8 @@ public class PlayerMovementScript : MonoBehaviour
 
     }
 
+    public void setNoLongerDodging()
+    {
+        dodging = false;
+    }
 }
